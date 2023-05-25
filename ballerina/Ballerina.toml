@@ -1,0 +1,16 @@
+[package]
+org = "ballerinax"
+name = "persist.inmemory"
+version = "1.0.0"
+authors = ["Ballerina"]
+keywords = ["persist", "inmemory"]
+repository = "https://github.com/ballerina-platform/module-ballerinax-persist.inmemory"
+icon = "icon.png"
+license = ["Apache-2.0"]
+distribution = "2201.6.0"
+
+[[platform.java11.dependency]]
+groupId = "io.ballerina.persist"
+artifactId = "persist-native-inmemory"
+version = "1.0.0"
+path = "../native/build/libs/persist-inmemory-native-1.0.0-SNAPSHOT.jar"
