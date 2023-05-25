@@ -124,7 +124,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId project.group
-            artifactId "persist-inmemory-native"
+            artifactId "persist.inmemory-native"
             version = project.version
             artifact jar
         }
