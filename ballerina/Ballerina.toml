@@ -11,6 +11,6 @@ distribution = "2201.6.0"
 
 [[platform.java11.dependency]]
 groupId = "io.ballerina.persist"
-artifactId = "persist-native-inmemory"
+artifactId = "persist-inmemory-native"
 version = "1.0.0"
-path = "../native/build/libs/persist-inmemory-native-1.0.0-SNAPSHOT.jar"
+path = "../native/build/libs/persist.inmemory-native-1.0.0-SNAPSHOT.jar"
