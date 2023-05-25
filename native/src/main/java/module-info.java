@@ -16,7 +16,7 @@
  * under the License.
  */
 
-module io.ballerina.stdlib.persist {
+module io.ballerina.stdlib.persist.inmemory {
     requires io.ballerina.runtime;
     requires io.ballerina.lang;
     requires io.ballerina.stdlib.sql;

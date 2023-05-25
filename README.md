@@ -1,4 +1,4 @@
-Ballerina Persist Library
+Ballerina Persist - In-Memory Library
 ===================
 
   [![Build](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/actions/workflows/build-timestamped-master.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/actions/workflows/build-timestamped-master.yml)
@@ -12,7 +12,7 @@ This library provides Ballerina `persist` Tooling, which provides functionality 
 
 The `persist` commands will make it easy to enable Ballerina Persistence Layer in a bal project. With this support, users need not worry about the persistence layer in a project. Users can define an entity data model, validate the model and generate `persist` clients, which provide convenient APIs to store and query data in a data store.
 
-For more information, see [`persist.inmemory` API Documentation](https://lib.ballerina.io/ballerina/persist.inmemory/latest).
+For more information, see [`persist.inmemory` API Documentation](https://lib.ballerina.io/ballerinax/persist.inmemory/latest).
 
 ## Issues and projects 
 
@@ -101,6 +101,6 @@ All contributors are encouraged to read the [Ballerina code of conduct](https://
 
 ## Useful links
 
-* For more information go to the [`persist` library](https://lib.ballerina.io/ballerina/persist.inmemory/latest).
+* For more information go to the [`persist` library](https://lib.ballerina.io/ballerinax/persist.inmemory/latest).
 * Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
 * Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.
