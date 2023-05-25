@@ -18,9 +18,10 @@ import ballerina/persist;
 
 # Represents the metadata of an entity.
 #
+# + keyFields - Array of strings containing key field names
 # + query - Function pointer to query records as a stream
 # + queryOne - Function pointer for query by key
-# + associationMethods - Map of associated query function pointers
+# + associationsMethods - Map of associated query function pointers
 public type TableMetadata record {|
     string[] keyFields;
     isolated function (string[]) returns stream<record {}, persist:Error?> query;
