@@ -16,7 +16,7 @@
  *  under the License.
  */
 
- package io.ballerina.stdlib.persist.inmemory.datastore;
+package io.ballerina.stdlib.persist.inmemory.datastore;
 
 import io.ballerina.runtime.api.Environment;
 import io.ballerina.runtime.api.Future;
@@ -40,14 +40,16 @@ import io.ballerina.stdlib.persist.inmemory.ModuleUtils;
 
 import java.util.Map;
 
-import static io.ballerina.stdlib.persist.inmemory.Constants.ERROR;
-import static io.ballerina.stdlib.persist.inmemory.Constants.KEY_FIELDS;
-import static io.ballerina.stdlib.persist.inmemory.Utils.getEntity;
-import static io.ballerina.stdlib.persist.inmemory.Utils.getKey;
-import static io.ballerina.stdlib.persist.inmemory.Utils.getMetadata;
-import static io.ballerina.stdlib.persist.inmemory.Utils.getPersistClient;
-import static io.ballerina.stdlib.persist.inmemory.Utils.getRecordTypeWithKeyFields;
-import static io.ballerina.stdlib.persist.inmemory.Utils.getTransactionContextProperties;
+import static io.ballerina.stdlib.persist.Constants.ERROR;
+import static io.ballerina.stdlib.persist.Constants.KEY_FIELDS;
+import static io.ballerina.stdlib.persist.Constants.RUN_READ_BY_KEY_QUERY_METHOD;
+import static io.ballerina.stdlib.persist.Constants.RUN_READ_QUERY_METHOD;
+import static io.ballerina.stdlib.persist.Utils.getEntity;
+import static io.ballerina.stdlib.persist.Utils.getKey;
+import static io.ballerina.stdlib.persist.Utils.getMetadata;
+import static io.ballerina.stdlib.persist.Utils.getPersistClient;
+import static io.ballerina.stdlib.persist.Utils.getRecordTypeWithKeyFields;
+import static io.ballerina.stdlib.persist.Utils.getTransactionContextProperties;
 
 /**
   * This class provides the in-memory query processing implementations for persistence.
@@ -78,7 +80,7 @@ import static io.ballerina.stdlib.persist.inmemory.Utils.getTransactionContextPr
 
         Future balFuture = env.markAsync();
         env.getRuntime().invokeMethodAsyncSequentially(
-                persistClient, Constants.RUN_READ_QUERY_METHOD,
+                persistClient, RUN_READ_QUERY_METHOD,
                 null, null, new Callback() {
                     @Override
                     public void notifySuccess(Object o) {
@@ -126,7 +128,7 @@ import static io.ballerina.stdlib.persist.inmemory.Utils.getTransactionContextPr
 
         Future balFuture = env.markAsync();
         env.getRuntime().invokeMethodAsyncSequentially(
-                getPersistClient(client, entity), Constants.RUN_READ_BY_KEY_QUERY_METHOD,
+                getPersistClient(client, entity), RUN_READ_BY_KEY_QUERY_METHOD,
                 null, null, new Callback() {
                     @Override
                     public void notifySuccess(Object o) {
