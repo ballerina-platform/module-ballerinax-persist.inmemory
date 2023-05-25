@@ -352,7 +352,7 @@ isolated function queryEmployees(string[] fields) returns stream<record {}, pers
         on 'object.departmentDeptNo equals department?.deptNo
         outer join var workspace in workspacesClonedTable
         on 'object.workspaceWorkspaceId equals workspace?.workspaceId
-        select filterRecord(
+        select persist:filterRecord(
             {
             ...'object,
             "department": department,
@@ -375,7 +375,7 @@ isolated function queryOneEmployees(anydata key) returns record {}|persist:NotFo
     }
 
     from record {} 'object in employeesClonedTable
-    where getKey('object, ["empNo"]) == key
+    where persist:getKey('object, ["empNo"]) == key
     outer join var department in departmentsClonedTable
         on 'object.departmentDeptNo equals department?.deptNo
     outer join var workspace in workspacesClonedTable
@@ -397,7 +397,7 @@ isolated function queryBuildings(string[] fields) returns stream<record {}, pers
     }
 
     return from record {} 'object in buildingsClonedTable
-        select filterRecord({
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
@@ -409,7 +409,7 @@ isolated function queryOneBuildings(anydata key) returns record {}|persist:NotFo
     }
 
     from record {} 'object in buildingsClonedTable
-    where getKey('object, ["buildingCode"]) == key
+    where persist:getKey('object, ["buildingCode"]) == key
     do {
         return {
             ...'object
@@ -426,7 +426,7 @@ isolated function queryBuildingsWorkspaces(record {} value, string[] fields) ret
 
     return from record {} 'object in workspacesClonedTable
         where 'object.locationBuildingCode == value["buildingCode"]
-        select filterRecord({
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
@@ -438,7 +438,7 @@ isolated function queryDepartments(string[] fields) returns stream<record {}, pe
     }
 
     return from record {} 'object in departmentsClonedTable
-        select filterRecord({
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
@@ -450,7 +450,7 @@ isolated function queryOneDepartments(anydata key) returns record {}|persist:Not
     }
 
     from record {} 'object in departmentsClonedTable
-    where getKey('object, ["deptNo"]) == key
+    where persist:getKey('object, ["deptNo"]) == key
     do {
         return {
             ...'object
@@ -467,7 +467,7 @@ isolated function queryDepartmentsEmployees(record {} value, string[] fields) re
 
     return from record {} 'object in employeesClonedTable
         where 'object.departmentDeptNo == value["deptNo"]
-        select filterRecord({
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
@@ -485,7 +485,7 @@ isolated function queryWorkspaces(string[] fields) returns stream<record {}, per
     return from record {} 'object in workspacesClonedTable
         outer join var location in buildingsClonedTable
         on 'object.locationBuildingCode equals location?.buildingCode
-        select filterRecord({
+        select persist:filterRecord({
             ...'object,
             "location": location
         }, fields);
@@ -501,7 +501,7 @@ isolated function queryOneWorkspaces(anydata key) returns record {}|persist:NotF
         buildingsClonedTable = buildingsTable.clone();
     }
     from record {} 'object in workspacesClonedTable
-    where getKey('object, ["workspaceId"]) == key
+    where persist:getKey('object, ["workspaceId"]) == key
     outer join var location in buildingsClonedTable
         on 'object.locationBuildingCode equals location?.buildingCode
     do {
@@ -520,7 +520,7 @@ isolated function queryWorkspacesEmployees(record {} value, string[] fields) ret
     }
     return from record {} 'object in employeesClonedTable
         where 'object.workspaceWorkspaceId == value["workspaceId"]
-        select filterRecord({
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
@@ -532,7 +532,7 @@ isolated function queryOrderItems(string[] fields) returns stream<record {}, per
     }
 
     return from record {} 'object in orderItemsClonedTable
-        select filterRecord({
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
@@ -544,7 +544,7 @@ isolated function queryOneOrderItems(anydata key) returns record {}|persist:NotF
     }
 
     from record {} 'object in orderItemsClonedTable
-    where getKey('object, ["orderId", "itemId"]) == key
+    where persist:getKey('object, ["orderId", "itemId"]) == key
     do {
         return {
             ...'object

@@ -36,7 +36,7 @@ public isolated client class InMemoryClient {
     public isolated function runReadByKeyQuery(typedesc<record {}> rowType, anydata key, string[] fields = [], string[] include = [], typedesc<record {}>[] typeDescriptions = []) returns record {}|persist:Error {
         record {} 'object = check self.queryOne(key);
 
-        'object = filterRecord('object, self.addKeyFields(fields));
+        'object = persist:filterRecord('object, self.addKeyFields(fields));
         check self.getManyRelations('object, fields, include, typeDescriptions);
         self.removeUnwantedFields('object, fields);
 

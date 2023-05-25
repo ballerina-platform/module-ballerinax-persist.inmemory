@@ -493,7 +493,7 @@ isolated function queryAllTypes(string[] fields) returns stream<record {}, persi
     }
 
     return from record {} 'object in alltypesClonedTable
-        select filterRecord(
+        select persist:filterRecord(
                 {
             ...'object
         }, fields);
@@ -506,7 +506,7 @@ isolated function queryOneAllTypes(anydata key) returns record {}|persist:NotFou
     }
 
     from record {} 'object in alltypesClonedTable
-    where getKey('object, ["id"]) == key
+    where persist:getKey('object, ["id"]) == key
     do {
         return {
             ...'object
@@ -522,7 +522,7 @@ isolated function queryStringIdRecord(string[] fields) returns stream<record {},
     }
 
     return from record {} 'object in stringidrecordsClonedTable
-        select filterRecord(
+        select persist:filterRecord(
                 {
             ...'object
         }, fields);
@@ -535,7 +535,7 @@ isolated function queryOneStringIdRecord(anydata key) returns record {}|persist:
     }
 
     from record {} 'object in stringidrecordsClonedTable
-    where getKey('object, ["id"]) == key
+    where persist:getKey('object, ["id"]) == key
     do {
         return {
             ...'object
@@ -551,7 +551,7 @@ isolated function queryIntIdRecord(string[] fields) returns stream<record {}, pe
     }
 
     return from record {} 'object in intidrecordsClonedTable
-        select filterRecord(
+        select persist:filterRecord(
                 {
             ...'object
         }, fields);
@@ -564,7 +564,7 @@ isolated function queryOneIntIdRecord(anydata key) returns record {}|persist:Not
     }
 
     from record {} 'object in intidrecordsClonedTable
-    where getKey('object, ["id"]) == key
+    where persist:getKey('object, ["id"]) == key
     do {
         return {
             ...'object
@@ -580,7 +580,7 @@ isolated function queryFloatIdRecord(string[] fields) returns stream<record {}, 
     }
 
     return from record {} 'object in floatidrecordsClonedTable
-        select filterRecord(
+        select persist:filterRecord(
                 {
             ...'object
         }, fields);
@@ -593,7 +593,7 @@ isolated function queryOneFloatIdRecord(anydata key) returns record {}|persist:N
     }
 
     from record {} 'object in floatidrecordsClonedTable
-    where getKey('object, ["id"]) == key
+    where persist:getKey('object, ["id"]) == key
     do {
         return {
             ...'object
@@ -609,7 +609,7 @@ isolated function queryDecimalIdRecord(string[] fields) returns stream<record {}
     }
 
     return from record {} 'object in decimalidrecordsClonedTable
-        select filterRecord(
+        select persist:filterRecord(
                 {
             ...'object
         }, fields);
@@ -622,7 +622,7 @@ isolated function queryOneDecimalIdRecord(anydata key) returns record {}|persist
     }
 
     from record {} 'object in decimalidrecordsClonedTable
-    where getKey('object, ["id"]) == key
+    where persist:getKey('object, ["id"]) == key
     do {
         return {
             ...'object
@@ -638,7 +638,7 @@ isolated function queryBooleanIdRecord(string[] fields) returns stream<record {}
     }
 
     return from record {} 'object in booleanidrecordsClonedTable
-        select filterRecord(
+        select persist:filterRecord(
                 {
             ...'object
         }, fields);
@@ -651,7 +651,7 @@ isolated function queryOneBooleanIdRecord(anydata key) returns record {}|persist
     }
 
     from record {} 'object in booleanidrecordsClonedTable
-    where getKey('object, ["id"]) == key
+    where persist:getKey('object, ["id"]) == key
     do {
         return {
             ...'object
@@ -674,7 +674,7 @@ isolated function queryCompositeAssociationRecords(string[] fields) returns stre
         outer join var alltypesidrecord in alltypesidrecordsClonedTable
             on ['object.alltypesidrecordBooleanType, 'object.alltypesidrecordIntType, 'object.alltypesidrecordFloatType, 'object.alltypesidrecordDecimalType, 'object.alltypesidrecordStringType]
             equals [alltypesidrecord?.booleanType, alltypesidrecord?.intType, alltypesidrecord?.floatType, alltypesidrecord?.decimalType, alltypesidrecord?.stringType]
-        select filterRecord(
+        select persist:filterRecord(
                 {
             ...'object,
             "allTypesIdRecord": alltypesidrecord
@@ -692,7 +692,7 @@ isolated function queryOneCompositeAssociationRecords(anydata key) returns recor
     }
 
     from record {} 'object in compositeassociationrecordsClonedTable
-    where getKey('object, ["id"]) == key
+    where persist:getKey('object, ["id"]) == key
     outer join var alltypesidrecord in alltypesidrecordsClonedTable
             on ['object.alltypesidrecordBooleanType, 'object.alltypesidrecordIntType, 'object.alltypesidrecordFloatType, 'object.alltypesidrecordDecimalType, 'object.alltypesidrecordStringType]
             equals [alltypesidrecord?.booleanType, alltypesidrecord?.intType, alltypesidrecord?.floatType, alltypesidrecord?.decimalType, alltypesidrecord?.stringType]
@@ -712,7 +712,7 @@ isolated function queryAllTypesIdRecords(string[] fields) returns stream<record 
     }
 
     return from record {} 'object in alltypesidrecordsClonedTable
-        select filterRecord(
+        select persist:filterRecord(
                 {
             ...'object
         }, fields);
@@ -729,7 +729,7 @@ isolated function queryOneAllTypesIdRecords(anydata key) returns record {}|persi
     }
 
     from record {} 'object in alltypesidrecordsClonedTable
-    where getKey('object, ["booleanType", "intType", "floatType", "decimalType", "stringType"]) == key
+    where persist:getKey('object, ["booleanType", "intType", "floatType", "decimalType", "stringType"]) == key
     outer join var compositeassociationrecord in compositeassociationrecordsClonedTable
             on ['object.booleanType, 'object.intType, 'object.floatType, 'object.decimalType, 'object.stringType]
             equals [compositeassociationrecord?.alltypesidrecordBooleanType, compositeassociationrecord?.alltypesidrecordIntType, compositeassociationrecord?.alltypesidrecordFloatType, compositeassociationrecord?.alltypesidrecordDecimalType, compositeassociationrecord?.alltypesidrecordStringType]
