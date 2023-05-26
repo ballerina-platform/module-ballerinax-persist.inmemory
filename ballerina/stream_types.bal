@@ -15,6 +15,7 @@
 // under the License.
 
 import ballerina/persist;
+
 public class PersistInMemoryStream {
 
     private stream<record {}, error?>? anydataStream;

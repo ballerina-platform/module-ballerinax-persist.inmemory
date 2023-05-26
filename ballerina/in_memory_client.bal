@@ -64,25 +64,6 @@ public isolated client class InMemoryClient {
         }
     }
 
-    public isolated function getKey(anydata|record {} 'object) returns anydata|record {} {
-        record {} keyRecord = {};
-
-        string[] keyFields = self.keyFields;
-
-        if keyFields.length() == 1 && 'object is record {} {
-            return 'object[keyFields[0]];
-        }
-
-        if 'object is record {} {
-            foreach string key in keyFields {
-                keyRecord[key] = 'object[key];
-            }
-        } else {
-            keyRecord[keyFields[0]] = 'object;
-        }
-        return keyRecord;
-    }
-
     public isolated function getKeyFields() returns string[] {
         return self.keyFields;
     }
