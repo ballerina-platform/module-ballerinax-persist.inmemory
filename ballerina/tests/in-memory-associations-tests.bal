@@ -248,6 +248,7 @@ function inMemoryBuildingRelationsTest() returns error? {
     InMemoryRainierClient rainierClient = check new ();
 
     stream<BuildingInfo, error?> buildingStream = rainierClient->/buildings.get();
+    check buildingStream.close();
     BuildingInfo[] buildings = check from BuildingInfo building in buildingStream
         select building;
 

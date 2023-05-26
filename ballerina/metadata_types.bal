@@ -28,15 +28,3 @@ public type TableMetadata record {|
     isolated function (anydata) returns record {}|persist:NotFoundError queryOne;
     map<isolated function (record {}, string[]) returns record {}[]> associationsMethods = {};
 |};
-
-# Represents the type of the relation used in a `JOIN` operation.
-# Only used by the generated persist clients and `persist:SQLClient`.
-#
-# + ONE_TO_ONE - The association type is a one-to-one association
-# + ONE_TO_MANY - The entity is in the 'one' side of a one-to-many association
-# + MANY_TO_ONE - The entity is in the 'many' side of a one-to-many association
-public enum JoinType {
-    ONE_TO_ONE,
-    ONE_TO_MANY,
-    MANY_TO_ONE
-}
