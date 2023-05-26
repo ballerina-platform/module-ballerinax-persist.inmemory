@@ -47,7 +47,6 @@ public class PersistInMemoryStream {
             return <persist:Error>self.err;
         } else if self.anydataStream is stream<record {}, error?> {
             var anydataStream = <stream<record {}, error?>>self.anydataStream;
-            checkpanic anydataStream.close();
             var streamValue = anydataStream.next();
             if streamValue is () {
                 return streamValue;
@@ -77,7 +76,7 @@ public class PersistInMemoryStream {
 
     public isolated function close() returns persist:Error? {
         if self.anydataStream is stream<anydata, error?> {
-            error? e = (<stream>self.anydataStream).close();
+            error? e = (<stream<anydata, error?>>self.anydataStream).close();
             if e is error {
                 return <persist:Error>error(e.message());
             }
