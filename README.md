@@ -8,9 +8,9 @@ Ballerina Persist - In-Memory Library
   [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-persist.inmemory.svg)](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/commits/main)
   [![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-standard-library/module/persist.inmemory.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-standard-library/labels/module%2Fpersist.inmemory)
 
-This library provides Ballerina `persist` Tooling, which provides functionality to store and query data conveniently through a data model instead of SQL query language.
+This library provides in-memory tables support for the `bal persist` feature, which provides functionality to store and query data conveniently through a data model.
 
-The `persist` commands will make it easy to enable Ballerina Persistence Layer in a bal project. With this support, users need not worry about the persistence layer in a project. Users can define an entity data model, validate the model and generate `persist` clients, which provide convenient APIs to store and query data in a data store.
+The `persist` command will make it easy to enable `bal persist` feature in a Ballerina project. With this support, users need not worry about the persistence in a project. Users can define an entity data model, validate the model and generate `persist` clients for Inmemory tables, which provide convenient APIs to store and query data in a data store.
 
 For more information, see [`persist.inmemory` API Documentation](https://lib.ballerina.io/ballerinax/persist.inmemory/latest).
 
@@ -56,12 +56,12 @@ Execute the commands below to build from source.
         ./gradlew clean build -Pgroups=<Comma separated groups/test cases>
 
    **Tip:** The following groups of test cases are available.
-   
-   Groups | Test cases
-   ---| ---
-   basic | basic
-   associations | associations <br> one-to-many
-   composite-keys | composite-keys
+
+|     Groups      |          Test cases           |
+|:---------------:|:-----------------------------:|
+|      basic      |             basic             |
+|  associations   | associations <br> one-to-many |
+| composite-keys  |        composite-keys         |
 
 5. To disable some specific test groups:
 
@@ -101,6 +101,6 @@ All contributors are encouraged to read the [Ballerina code of conduct](https://
 
 ## Useful links
 
-* For more information go to the [`persist` library](https://lib.ballerina.io/ballerinax/persist.inmemory/latest).
+* For more information go to the [`persist.inmemory` library](https://lib.ballerina.io/ballerinax/persist.inmemory/latest).
 * Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
 * Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

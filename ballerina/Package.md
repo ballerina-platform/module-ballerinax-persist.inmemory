@@ -1,8 +1,14 @@
 ## Package overview
 
-This package includes Ballerina `persist` Tooling, which provides functionality to store and query data conveniently through a data model instead of SQL query language.
+This package provides in-memory table support for the `bal persist` feature, which provides functionality to store and query data from in-memory tables conveniently through a data model.
 
-The `persist` commands will make it easy to enable Ballerina Persistence Layer in a bal project. With this support, users need not worry about the persistence layer in a project. Users can define an entity data model, validate the model and generate `persist` clients, which provide convenient APIs to store and query data in a data store.
+The In-Memory data store is a simple data store that stores data in memory. This data store is useful for testing purposes. The In-Memory data store is the default data store for Ballerina Persistence. Therefore, you do not need to explicitly specify the data store when you are using the In-Memory data store.
+
+## Supported Ballerina Types
+In-memory uses Ballerina tables as the data store. Therefore, all types supported by Ballerina are supported with `bal persist` when in-memory is used as the data source.
+
+## Configuration
+The In-Memory data store does not require any configuration.
 
 ## Report issues
 
