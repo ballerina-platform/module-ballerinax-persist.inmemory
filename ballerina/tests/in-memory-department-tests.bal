@@ -70,7 +70,7 @@ function inMemoryDepartmentReadOneTestNegative() returns error? {
 
     Department|error departmentRetrieved = rainierClient->/departments/["invalid-department-id"].get();
     if departmentRetrieved is persist:NotFoundError {
-        test:assertEquals(departmentRetrieved.message(), "Invalid key: invalid-department-id");
+        test:assertEquals(departmentRetrieved.message(), "A record with the key 'invalid-department-id' does not exist for the entity 'Department'.");
     } else {
         test:assertFail("NotFoundError expected.");
     }
@@ -140,7 +140,7 @@ function inMemoryDepartmentUpdateTestNegative1() returns error? {
     });
 
     if department is persist:NotFoundError {
-        test:assertEquals(department.message(), "Not found: invalid-department-id");
+        test:assertEquals(department.message(), "A record with the key 'invalid-department-id' does not exist for the entity 'Department'.");
     } else {
         test:assertFail("NotFoundError expected.");
     }
@@ -175,7 +175,7 @@ function inMemoryDepartmentDeleteTestNegative() returns error? {
     Department|error department = rainierClient->/departments/[department1.deptNo].delete();
 
     if department is persist:NotFoundError {
-        test:assertEquals(department.message(), string `Not found: department-1`);
+        test:assertEquals(department.message(), string `A record with the key '${department1.deptNo}' does not exist for the entity 'Department'.`);
     } else {
         test:assertFail("NotFoundError expected.");
     }

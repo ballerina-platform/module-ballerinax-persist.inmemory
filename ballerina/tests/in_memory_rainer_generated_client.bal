@@ -97,7 +97,7 @@ public isolated client class InMemoryRainierClient {
         foreach BuildingInsert value in data.clone() {
             lock {
                 if buildingsTable.hasKey(value.buildingCode) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + value.buildingCode);
+                    return persist:getAlreadyExistsError("Building", value.buildingCode);
                 }
                 buildingsTable.put(value.clone());
             }
@@ -109,7 +109,7 @@ public isolated client class InMemoryRainierClient {
     isolated resource function put buildings/[string buildingCode](BuildingUpdate value) returns Building|persist:Error {
         lock {
             if !buildingsTable.hasKey(buildingCode) {
-                return <persist:NotFoundError>error("Not found: " + buildingCode);
+                return persist:getNotFoundError("Building", buildingCode);
             }
 
             Building building = buildingsTable.get(buildingCode);
@@ -125,7 +125,7 @@ public isolated client class InMemoryRainierClient {
     isolated resource function delete buildings/[string buildingCode]() returns Building|persist:Error {
         lock {
             if !buildingsTable.hasKey(buildingCode) {
-                return <persist:NotFoundError>error("Not found: " + buildingCode);
+                return persist:getNotFoundError("Building", buildingCode);
             }
             return buildingsTable.remove(buildingCode).clone();
         }
@@ -146,7 +146,7 @@ public isolated client class InMemoryRainierClient {
         foreach DepartmentInsert value in data.clone() {
             lock {
                 if departmentsTable.hasKey(value.deptNo) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + value.deptNo);
+                    return persist:getAlreadyExistsError("Department", value.deptNo);
                 }
                 departmentsTable.put(value.clone());
             }
@@ -158,7 +158,7 @@ public isolated client class InMemoryRainierClient {
     isolated resource function put departments/[string deptNo](DepartmentUpdate value) returns Department|persist:Error {
         lock {
             if !departmentsTable.hasKey(deptNo) {
-                return <persist:NotFoundError>error("Not found: " + deptNo);
+                return persist:getNotFoundError("Department", deptNo);
             }
 
             Department department = departmentsTable.get(deptNo);
@@ -174,7 +174,7 @@ public isolated client class InMemoryRainierClient {
     isolated resource function delete departments/[string deptNo]() returns Department|persist:Error {
         lock {
             if !departmentsTable.hasKey(deptNo) {
-                return <persist:NotFoundError>error("Not found: " + deptNo);
+                return persist:getNotFoundError("Department", deptNo);
             }
             return departmentsTable.remove(deptNo).clone();
         }
@@ -195,7 +195,7 @@ public isolated client class InMemoryRainierClient {
         foreach WorkspaceInsert value in data.clone() {
             lock {
                 if workspacesTable.hasKey(value.workspaceId) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + value.workspaceId);
+                    return persist:getAlreadyExistsError("Workspace", value.workspaceId);
                 }
                 workspacesTable.put(value.clone());
             }
@@ -207,7 +207,7 @@ public isolated client class InMemoryRainierClient {
     isolated resource function put workspaces/[string workspaceId](WorkspaceUpdate value) returns Workspace|persist:Error {
         lock {
             if !workspacesTable.hasKey(workspaceId) {
-                return <persist:NotFoundError>error("Not found: " + workspaceId);
+                return persist:getNotFoundError("Workspace", workspaceId);
             }
 
             Workspace workspace = workspacesTable.get(workspaceId);
@@ -223,7 +223,7 @@ public isolated client class InMemoryRainierClient {
     isolated resource function delete workspaces/[string workspaceId]() returns Workspace|persist:Error {
         lock {
             if !workspacesTable.hasKey(workspaceId) {
-                return <persist:NotFoundError>error("Not found: " + workspaceId);
+                return persist:getNotFoundError("Workspace", workspaceId);
             }
             return workspacesTable.remove(workspaceId).clone();
         }
@@ -244,7 +244,7 @@ public isolated client class InMemoryRainierClient {
         foreach EmployeeInsert value in data.clone() {
             lock {
                 if employeesTable.hasKey(value.empNo) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + value.empNo);
+                    return persist:getAlreadyExistsError("Employee", value.empNo);
                 }
                 employeesTable.put(value.clone());
             }
@@ -256,7 +256,7 @@ public isolated client class InMemoryRainierClient {
     isolated resource function put employees/[string empNo](EmployeeUpdate value) returns Employee|persist:Error {
         lock {
             if !employeesTable.hasKey(empNo) {
-                return <persist:NotFoundError>error("Not found: " + empNo);
+                return persist:getNotFoundError("Employee", empNo);
             }
 
             Employee employee = employeesTable.get(empNo);
@@ -272,7 +272,7 @@ public isolated client class InMemoryRainierClient {
     isolated resource function delete employees/[string empNo]() returns Employee|persist:Error {
         lock {
             if !employeesTable.hasKey(empNo) {
-                return <persist:NotFoundError>error("Not found: " + empNo);
+                return persist:getNotFoundError("Employee", empNo);
             }
             return employeesTable.remove(empNo).clone();
         }
@@ -297,7 +297,7 @@ public isolated client class InMemoryRainierClient {
         foreach OrderItemInsert value in data.clone() {
             lock {
                 if orderItemsTable.hasKey([value.orderId, value.itemId]) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + [value.orderId, value.itemId].toString());
+                    return persist:getAlreadyExistsError("OrderItem", {orderId: value.orderId, itemId: value.itemId});
                 }
                 orderItemsTable.put(value.clone());
             }
@@ -309,7 +309,7 @@ public isolated client class InMemoryRainierClient {
     isolated resource function put orderitems/[string orderId]/[string itemId](OrderItemUpdate value) returns OrderItem|persist:Error {
         lock {
             if !orderItemsTable.hasKey([orderId, itemId]) {
-                return <persist:NotFoundError>error("Not found: " + [orderId, itemId].toString());
+                return persist:getNotFoundError("OrderItem", {orderId: orderId, itemId: itemId});
             }
 
             OrderItem orderItem = orderItemsTable.get([orderId, itemId]);
@@ -325,7 +325,7 @@ public isolated client class InMemoryRainierClient {
     isolated resource function delete orderitems/[string orderId]/[string itemId]() returns OrderItem|persist:Error {
         lock {
             if !orderItemsTable.hasKey([orderId, itemId]) {
-                return <persist:NotFoundError>error("Not found: " + [orderId, itemId].toString());
+                return persist:getNotFoundError("OrderItem", {orderId: orderId, itemId: itemId});
             }
             return orderItemsTable.remove([orderId, itemId]).clone();
         }
@@ -387,7 +387,8 @@ isolated function queryOneEmployees(anydata key) returns record {}|persist:NotFo
             "workspace": workspace
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+
+    return persist:getNotFoundError("Employee", key);
 }
 
 isolated function queryBuildings(string[] fields) returns stream<record {}, persist:Error?> {
@@ -415,7 +416,7 @@ isolated function queryOneBuildings(anydata key) returns record {}|persist:NotFo
             ...'object
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("Building", key);
 }
 
 isolated function queryBuildingsWorkspaces(record {} value, string[] fields) returns record {}[] {
@@ -456,7 +457,7 @@ isolated function queryOneDepartments(anydata key) returns record {}|persist:Not
             ...'object
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("Department", key);
 }
 
 isolated function queryDepartmentsEmployees(record {} value, string[] fields) returns record {}[] {
@@ -510,7 +511,7 @@ isolated function queryOneWorkspaces(anydata key) returns record {}|persist:NotF
             "location": location
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("Workspace", key);
 }
 
 isolated function queryWorkspacesEmployees(record {} value, string[] fields) returns record {}[] {
@@ -550,5 +551,5 @@ isolated function queryOneOrderItems(anydata key) returns record {}|persist:NotF
             ...'object
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("OrderItem", key);
 }
