@@ -14,8 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/jballerina.java;
 import ballerina/persist;
+import ballerina/jballerina.java;
 
 const ALL_TYPES = "alltypes";
 const STRING_ID_RECORD = "stringidrecords";
@@ -25,7 +25,6 @@ const DECIMAL_ID_RECORD = "decimalidrecords";
 const BOOLEAN_ID_RECORD = "booleanidrecords";
 const COMPOSITE_ASSOCIATION_RECORD = "compositeassociationrecords";
 const ALL_TYPES_ID_RECORD = "alltypesidrecords";
-
 final isolated table<AllTypes> key(id) alltypesTable = table [];
 final isolated table<StringIdRecord> key(id) stringidrecordsTable = table [];
 final isolated table<IntIdRecord> key(id) intidrecordsTable = table [];
@@ -41,50 +40,48 @@ public isolated client class InMemoryTestEntitiesClient {
     private final map<InMemoryClient> persistClients;
 
     public isolated function init() returns persist:Error? {
-
         final map<TableMetadata> metadata = {
             [ALL_TYPES] : {
                 keyFields: ["id"],
-                query: queryAllTypes,
-                queryOne: queryOneAllTypes
+                query: queryAlltypes,
+                queryOne: queryOneAlltypes
             },
             [STRING_ID_RECORD] : {
                 keyFields: ["id"],
-                query: queryStringIdRecord,
-                queryOne: queryOneStringIdRecord
+                query: queryStringidrecords,
+                queryOne: queryOneStringidrecords
             },
             [INT_ID_RECORD] : {
                 keyFields: ["id"],
-                query: queryIntIdRecord,
-                queryOne: queryOneIntIdRecord
+                query: queryIntidrecords,
+                queryOne: queryOneIntidrecords
             },
             [FLOAT_ID_RECORD] : {
                 keyFields: ["id"],
-                query: queryFloatIdRecord,
-                queryOne: queryOneFloatIdRecord
+                query: queryFloatidrecords,
+                queryOne: queryOneFloatidrecords
             },
             [DECIMAL_ID_RECORD] : {
                 keyFields: ["id"],
-                query: queryDecimalIdRecord,
-                queryOne: queryOneDecimalIdRecord
+                query: queryDecimalidrecords,
+                queryOne: queryOneDecimalidrecords
             },
             [BOOLEAN_ID_RECORD] : {
                 keyFields: ["id"],
-                query: queryBooleanIdRecord,
-                queryOne: queryOneBooleanIdRecord
+                query: queryBooleanidrecords,
+                queryOne: queryOneBooleanidrecords
             },
             [COMPOSITE_ASSOCIATION_RECORD] : {
                 keyFields: ["id"],
-                query: queryCompositeAssociationRecords,
-                queryOne: queryOneCompositeAssociationRecords
+                query: queryCompositeassociationrecords,
+                queryOne: queryOneCompositeassociationrecords
             },
             [ALL_TYPES_ID_RECORD] : {
                 keyFields: ["booleanType", "intType", "floatType", "decimalType", "stringType"],
-                query: queryAllTypesIdRecords,
-                queryOne: queryOneAllTypesIdRecords
+                query: queryAlltypesidrecords,
+                queryOne: queryOneAlltypesidrecords
             }
         };
-
         self.persistClients = {
             [ALL_TYPES] : check new (metadata.get(ALL_TYPES).cloneReadOnly()),
             [STRING_ID_RECORD] : check new (metadata.get(STRING_ID_RECORD).cloneReadOnly()),
@@ -95,7 +92,7 @@ public isolated client class InMemoryTestEntitiesClient {
             [COMPOSITE_ASSOCIATION_RECORD] : check new (metadata.get(COMPOSITE_ASSOCIATION_RECORD).cloneReadOnly()),
             [ALL_TYPES_ID_RECORD] : check new (metadata.get(ALL_TYPES_ID_RECORD).cloneReadOnly())
         };
-    };
+    }
 
     isolated resource function get alltypes(AllTypesTargetType targetType = <>) returns stream<targetType, persist:Error?> = @java:Method {
         'class: "io.ballerina.stdlib.persist.inmemory.datastore.InMemoryProcessor",
@@ -112,7 +109,7 @@ public isolated client class InMemoryTestEntitiesClient {
         foreach AllTypesInsert value in data {
             lock {
                 if alltypesTable.hasKey(value.id) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + value.id.toString());
+                    return persist:getAlreadyExistsError("AllTypes", value.id);
                 }
                 alltypesTable.put(value.clone());
             }
@@ -124,13 +121,12 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function put alltypes/[int id](AllTypesUpdate value) returns AllTypes|persist:Error {
         lock {
             if !alltypesTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("AllTypes", id);
             }
             AllTypes alltypes = alltypesTable.get(id);
             foreach var [k, v] in value.clone().entries() {
                 alltypes[k] = v;
             }
-
             alltypesTable.put(alltypes);
             return alltypes.clone();
         }
@@ -139,7 +135,7 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function delete alltypes/[int id]() returns AllTypes|persist:Error {
         lock {
             if !alltypesTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("AllTypes", id);
             }
             return alltypesTable.remove(id).clone();
         }
@@ -160,7 +156,7 @@ public isolated client class InMemoryTestEntitiesClient {
         foreach StringIdRecordInsert value in data {
             lock {
                 if stringidrecordsTable.hasKey(value.id) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + value.id.toString());
+                    return persist:getAlreadyExistsError("StringIdRecord", value.id);
                 }
                 stringidrecordsTable.put(value.clone());
             }
@@ -172,13 +168,12 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function put stringidrecords/[string id](StringIdRecordUpdate value) returns StringIdRecord|persist:Error {
         lock {
             if !stringidrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("StringIdRecord", id);
             }
             StringIdRecord stringidrecord = stringidrecordsTable.get(id);
             foreach var [k, v] in value.clone().entries() {
                 stringidrecord[k] = v;
             }
-
             stringidrecordsTable.put(stringidrecord);
             return stringidrecord.clone();
         }
@@ -187,7 +182,7 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function delete stringidrecords/[string id]() returns StringIdRecord|persist:Error {
         lock {
             if !stringidrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("StringIdRecord", id);
             }
             return stringidrecordsTable.remove(id).clone();
         }
@@ -208,7 +203,7 @@ public isolated client class InMemoryTestEntitiesClient {
         foreach IntIdRecordInsert value in data {
             lock {
                 if intidrecordsTable.hasKey(value.id) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + value.id.toString());
+                    return persist:getAlreadyExistsError("IntIdRecord", value.id);
                 }
                 intidrecordsTable.put(value.clone());
             }
@@ -220,13 +215,12 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function put intidrecords/[int id](IntIdRecordUpdate value) returns IntIdRecord|persist:Error {
         lock {
             if !intidrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("IntIdRecord", id);
             }
             IntIdRecord intidrecord = intidrecordsTable.get(id);
             foreach var [k, v] in value.clone().entries() {
                 intidrecord[k] = v;
             }
-
             intidrecordsTable.put(intidrecord);
             return intidrecord.clone();
         }
@@ -235,7 +229,7 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function delete intidrecords/[int id]() returns IntIdRecord|persist:Error {
         lock {
             if !intidrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("IntIdRecord", id);
             }
             return intidrecordsTable.remove(id).clone();
         }
@@ -256,7 +250,7 @@ public isolated client class InMemoryTestEntitiesClient {
         foreach FloatIdRecordInsert value in data {
             lock {
                 if floatidrecordsTable.hasKey(value.id) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + value.id.toString());
+                    return persist:getAlreadyExistsError("FloatIdRecord", value.id);
                 }
                 floatidrecordsTable.put(value.clone());
             }
@@ -268,13 +262,12 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function put floatidrecords/[float id](FloatIdRecordUpdate value) returns FloatIdRecord|persist:Error {
         lock {
             if !floatidrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("FloatIdRecord", id);
             }
             FloatIdRecord floatidrecord = floatidrecordsTable.get(id);
             foreach var [k, v] in value.clone().entries() {
                 floatidrecord[k] = v;
             }
-
             floatidrecordsTable.put(floatidrecord);
             return floatidrecord.clone();
         }
@@ -283,7 +276,7 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function delete floatidrecords/[float id]() returns FloatIdRecord|persist:Error {
         lock {
             if !floatidrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("FloatIdRecord", id);
             }
             return floatidrecordsTable.remove(id).clone();
         }
@@ -304,7 +297,7 @@ public isolated client class InMemoryTestEntitiesClient {
         foreach DecimalIdRecordInsert value in data {
             lock {
                 if decimalidrecordsTable.hasKey(value.id) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + value.id.toString());
+                    return persist:getAlreadyExistsError("DecimalIdRecord", value.id);
                 }
                 decimalidrecordsTable.put(value.clone());
             }
@@ -316,13 +309,12 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function put decimalidrecords/[decimal id](DecimalIdRecordUpdate value) returns DecimalIdRecord|persist:Error {
         lock {
             if !decimalidrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("DecimalIdRecord", id);
             }
             DecimalIdRecord decimalidrecord = decimalidrecordsTable.get(id);
             foreach var [k, v] in value.clone().entries() {
                 decimalidrecord[k] = v;
             }
-
             decimalidrecordsTable.put(decimalidrecord);
             return decimalidrecord.clone();
         }
@@ -331,7 +323,7 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function delete decimalidrecords/[decimal id]() returns DecimalIdRecord|persist:Error {
         lock {
             if !decimalidrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("DecimalIdRecord", id);
             }
             return decimalidrecordsTable.remove(id).clone();
         }
@@ -352,7 +344,7 @@ public isolated client class InMemoryTestEntitiesClient {
         foreach BooleanIdRecordInsert value in data {
             lock {
                 if booleanidrecordsTable.hasKey(value.id) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + value.id.toString());
+                    return persist:getAlreadyExistsError("BooleanIdRecord", value.id);
                 }
                 booleanidrecordsTable.put(value.clone());
             }
@@ -364,13 +356,12 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function put booleanidrecords/[boolean id](BooleanIdRecordUpdate value) returns BooleanIdRecord|persist:Error {
         lock {
             if !booleanidrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("BooleanIdRecord", id);
             }
             BooleanIdRecord booleanidrecord = booleanidrecordsTable.get(id);
             foreach var [k, v] in value.clone().entries() {
                 booleanidrecord[k] = v;
             }
-
             booleanidrecordsTable.put(booleanidrecord);
             return booleanidrecord.clone();
         }
@@ -379,7 +370,7 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function delete booleanidrecords/[boolean id]() returns BooleanIdRecord|persist:Error {
         lock {
             if !booleanidrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("BooleanIdRecord", id);
             }
             return booleanidrecordsTable.remove(id).clone();
         }
@@ -400,7 +391,7 @@ public isolated client class InMemoryTestEntitiesClient {
         foreach CompositeAssociationRecordInsert value in data {
             lock {
                 if compositeassociationrecordsTable.hasKey(value.id) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + value.id.toString());
+                    return persist:getAlreadyExistsError("CompositeAssociationRecord", value.id);
                 }
                 compositeassociationrecordsTable.put(value.clone());
             }
@@ -412,22 +403,21 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function put compositeassociationrecords/[string id](CompositeAssociationRecordUpdate value) returns CompositeAssociationRecord|persist:Error {
         lock {
             if !compositeassociationrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("CompositeAssociationRecord", id);
             }
-            CompositeAssociationRecord compositeassociationrecords = compositeassociationrecordsTable.get(id);
+            CompositeAssociationRecord compositeassociationrecord = compositeassociationrecordsTable.get(id);
             foreach var [k, v] in value.clone().entries() {
-                compositeassociationrecords[k] = v;
+                compositeassociationrecord[k] = v;
             }
-
-            compositeassociationrecordsTable.put(compositeassociationrecords);
-            return compositeassociationrecords.clone();
+            compositeassociationrecordsTable.put(compositeassociationrecord);
+            return compositeassociationrecord.clone();
         }
     }
 
     isolated resource function delete compositeassociationrecords/[string id]() returns CompositeAssociationRecord|persist:Error {
         lock {
             if !compositeassociationrecordsTable.hasKey(id) {
-                return <persist:NotFoundError>error("Not found: " + id.toString());
+                return persist:getNotFoundError("CompositeAssociationRecord", id);
             }
             return compositeassociationrecordsTable.remove(id).clone();
         }
@@ -448,7 +438,7 @@ public isolated client class InMemoryTestEntitiesClient {
         foreach AllTypesIdRecordInsert value in data {
             lock {
                 if alltypesidrecordsTable.hasKey([value.booleanType, value.intType, value.floatType, value.decimalType, value.stringType]) {
-                    return <persist:AlreadyExistsError>error("Duplicate key: " + [value.booleanType, value.intType, value.floatType, value.decimalType, value.stringType].toString());
+                    return persist:getAlreadyExistsError("AllTypesIdRecord", {booleanType: value.booleanType, intType: value.intType, floatType: value.floatType, decimalType: value.decimalType, stringType: value.stringType});
                 }
                 alltypesidrecordsTable.put(value.clone());
             }
@@ -460,22 +450,21 @@ public isolated client class InMemoryTestEntitiesClient {
     isolated resource function put alltypesidrecords/[boolean booleanType]/[int intType]/[float floatType]/[decimal decimalType]/[string stringType](AllTypesIdRecordUpdate value) returns AllTypesIdRecord|persist:Error {
         lock {
             if !alltypesidrecordsTable.hasKey([booleanType, intType, floatType, decimalType, stringType]) {
-                return <persist:NotFoundError>error("Not found: " + [booleanType, intType, floatType, decimalType, stringType].toString());
+                return persist:getNotFoundError("AllTypesIdRecord", {booleanType: booleanType, intType: intType, floatType: floatType, decimalType: decimalType, stringType: stringType});
             }
-            AllTypesIdRecord alltypesidrecords = alltypesidrecordsTable.get([booleanType, intType, floatType, decimalType, stringType]);
+            AllTypesIdRecord alltypesidrecord = alltypesidrecordsTable.get([booleanType, intType, floatType, decimalType, stringType]);
             foreach var [k, v] in value.clone().entries() {
-                alltypesidrecords[k] = v;
+                alltypesidrecord[k] = v;
             }
-
-            alltypesidrecordsTable.put(alltypesidrecords);
-            return alltypesidrecords.clone();
+            alltypesidrecordsTable.put(alltypesidrecord);
+            return alltypesidrecord.clone();
         }
     }
 
     isolated resource function delete alltypesidrecords/[boolean booleanType]/[int intType]/[float floatType]/[decimal decimalType]/[string stringType]() returns AllTypesIdRecord|persist:Error {
         lock {
             if !alltypesidrecordsTable.hasKey([booleanType, intType, floatType, decimalType, stringType]) {
-                return <persist:NotFoundError>error("Not found: " + [booleanType, intType, floatType, decimalType, stringType].toString());
+                return persist:getNotFoundError("AllTypesIdRecord", {booleanType: booleanType, intType: intType, floatType: floatType, decimalType: decimalType, stringType: stringType});
             }
             return alltypesidrecordsTable.remove([booleanType, intType, floatType, decimalType, stringType]).clone();
         }
@@ -486,25 +475,22 @@ public isolated client class InMemoryTestEntitiesClient {
     }
 }
 
-isolated function queryAllTypes(string[] fields) returns stream<record {}, persist:Error?> {
+isolated function queryAlltypes(string[] fields) returns stream<record {}, persist:Error?> {
     table<AllTypes> key(id) alltypesClonedTable;
     lock {
         alltypesClonedTable = alltypesTable.clone();
     }
-
     return from record {} 'object in alltypesClonedTable
-        select persist:filterRecord(
-                {
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
 
-isolated function queryOneAllTypes(anydata key) returns record {}|persist:NotFoundError {
+isolated function queryOneAlltypes(anydata key) returns record {}|persist:NotFoundError {
     table<AllTypes> key(id) alltypesClonedTable;
     lock {
         alltypesClonedTable = alltypesTable.clone();
     }
-
     from record {} 'object in alltypesClonedTable
     where persist:getKey('object, ["id"]) == key
     do {
@@ -512,28 +498,25 @@ isolated function queryOneAllTypes(anydata key) returns record {}|persist:NotFou
             ...'object
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("AllTypes", key);
 }
 
-isolated function queryStringIdRecord(string[] fields) returns stream<record {}, persist:Error?> {
+isolated function queryStringidrecords(string[] fields) returns stream<record {}, persist:Error?> {
     table<StringIdRecord> key(id) stringidrecordsClonedTable;
     lock {
         stringidrecordsClonedTable = stringidrecordsTable.clone();
     }
-
     return from record {} 'object in stringidrecordsClonedTable
-        select persist:filterRecord(
-                {
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
 
-isolated function queryOneStringIdRecord(anydata key) returns record {}|persist:NotFoundError {
+isolated function queryOneStringidrecords(anydata key) returns record {}|persist:NotFoundError {
     table<StringIdRecord> key(id) stringidrecordsClonedTable;
     lock {
         stringidrecordsClonedTable = stringidrecordsTable.clone();
     }
-
     from record {} 'object in stringidrecordsClonedTable
     where persist:getKey('object, ["id"]) == key
     do {
@@ -541,28 +524,25 @@ isolated function queryOneStringIdRecord(anydata key) returns record {}|persist:
             ...'object
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("StringIdRecord", key);
 }
 
-isolated function queryIntIdRecord(string[] fields) returns stream<record {}, persist:Error?> {
+isolated function queryIntidrecords(string[] fields) returns stream<record {}, persist:Error?> {
     table<IntIdRecord> key(id) intidrecordsClonedTable;
     lock {
         intidrecordsClonedTable = intidrecordsTable.clone();
     }
-
     return from record {} 'object in intidrecordsClonedTable
-        select persist:filterRecord(
-                {
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
 
-isolated function queryOneIntIdRecord(anydata key) returns record {}|persist:NotFoundError {
+isolated function queryOneIntidrecords(anydata key) returns record {}|persist:NotFoundError {
     table<IntIdRecord> key(id) intidrecordsClonedTable;
     lock {
         intidrecordsClonedTable = intidrecordsTable.clone();
     }
-
     from record {} 'object in intidrecordsClonedTable
     where persist:getKey('object, ["id"]) == key
     do {
@@ -570,28 +550,25 @@ isolated function queryOneIntIdRecord(anydata key) returns record {}|persist:Not
             ...'object
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("IntIdRecord", key);
 }
 
-isolated function queryFloatIdRecord(string[] fields) returns stream<record {}, persist:Error?> {
+isolated function queryFloatidrecords(string[] fields) returns stream<record {}, persist:Error?> {
     table<FloatIdRecord> key(id) floatidrecordsClonedTable;
     lock {
         floatidrecordsClonedTable = floatidrecordsTable.clone();
     }
-
     return from record {} 'object in floatidrecordsClonedTable
-        select persist:filterRecord(
-                {
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
 
-isolated function queryOneFloatIdRecord(anydata key) returns record {}|persist:NotFoundError {
+isolated function queryOneFloatidrecords(anydata key) returns record {}|persist:NotFoundError {
     table<FloatIdRecord> key(id) floatidrecordsClonedTable;
     lock {
         floatidrecordsClonedTable = floatidrecordsTable.clone();
     }
-
     from record {} 'object in floatidrecordsClonedTable
     where persist:getKey('object, ["id"]) == key
     do {
@@ -599,28 +576,25 @@ isolated function queryOneFloatIdRecord(anydata key) returns record {}|persist:N
             ...'object
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("FloatIdRecord", key);
 }
 
-isolated function queryDecimalIdRecord(string[] fields) returns stream<record {}, persist:Error?> {
+isolated function queryDecimalidrecords(string[] fields) returns stream<record {}, persist:Error?> {
     table<DecimalIdRecord> key(id) decimalidrecordsClonedTable;
     lock {
         decimalidrecordsClonedTable = decimalidrecordsTable.clone();
     }
-
     return from record {} 'object in decimalidrecordsClonedTable
-        select persist:filterRecord(
-                {
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
 
-isolated function queryOneDecimalIdRecord(anydata key) returns record {}|persist:NotFoundError {
+isolated function queryOneDecimalidrecords(anydata key) returns record {}|persist:NotFoundError {
     table<DecimalIdRecord> key(id) decimalidrecordsClonedTable;
     lock {
         decimalidrecordsClonedTable = decimalidrecordsTable.clone();
     }
-
     from record {} 'object in decimalidrecordsClonedTable
     where persist:getKey('object, ["id"]) == key
     do {
@@ -628,28 +602,25 @@ isolated function queryOneDecimalIdRecord(anydata key) returns record {}|persist
             ...'object
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("DecimalIdRecord", key);
 }
 
-isolated function queryBooleanIdRecord(string[] fields) returns stream<record {}, persist:Error?> {
+isolated function queryBooleanidrecords(string[] fields) returns stream<record {}, persist:Error?> {
     table<BooleanIdRecord> key(id) booleanidrecordsClonedTable;
     lock {
         booleanidrecordsClonedTable = booleanidrecordsTable.clone();
     }
-
     return from record {} 'object in booleanidrecordsClonedTable
-        select persist:filterRecord(
-                {
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
 
-isolated function queryOneBooleanIdRecord(anydata key) returns record {}|persist:NotFoundError {
+isolated function queryOneBooleanidrecords(anydata key) returns record {}|persist:NotFoundError {
     table<BooleanIdRecord> key(id) booleanidrecordsClonedTable;
     lock {
         booleanidrecordsClonedTable = booleanidrecordsTable.clone();
     }
-
     from record {} 'object in booleanidrecordsClonedTable
     where persist:getKey('object, ["id"]) == key
     do {
@@ -657,88 +628,70 @@ isolated function queryOneBooleanIdRecord(anydata key) returns record {}|persist
             ...'object
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("BooleanIdRecord", key);
 }
 
-isolated function queryCompositeAssociationRecords(string[] fields) returns stream<record {}, persist:Error?> {
+isolated function queryCompositeassociationrecords(string[] fields) returns stream<record {}, persist:Error?> {
     table<CompositeAssociationRecord> key(id) compositeassociationrecordsClonedTable;
-    table<AllTypesIdRecord> key(booleanType, intType, floatType, decimalType, stringType) alltypesidrecordsClonedTable;
     lock {
         compositeassociationrecordsClonedTable = compositeassociationrecordsTable.clone();
     }
+    table<AllTypesIdRecord> key(booleanType, intType, floatType, decimalType, stringType) alltypesidrecordsClonedTable;
     lock {
         alltypesidrecordsClonedTable = alltypesidrecordsTable.clone();
     }
-
     return from record {} 'object in compositeassociationrecordsClonedTable
-        outer join var alltypesidrecord in alltypesidrecordsClonedTable
-            on ['object.alltypesidrecordBooleanType, 'object.alltypesidrecordIntType, 'object.alltypesidrecordFloatType, 'object.alltypesidrecordDecimalType, 'object.alltypesidrecordStringType]
-            equals [alltypesidrecord?.booleanType, alltypesidrecord?.intType, alltypesidrecord?.floatType, alltypesidrecord?.decimalType, alltypesidrecord?.stringType]
-        select persist:filterRecord(
-                {
+        outer join var alltypesidrecord in alltypesidrecordsClonedTable on ['object.alltypesidrecordBooleanType, 'object.alltypesidrecordIntType, 'object.alltypesidrecordFloatType, 'object.alltypesidrecordDecimalType, 'object.alltypesidrecordStringType] equals [alltypesidrecord?.booleanType, alltypesidrecord?.intType, alltypesidrecord?.floatType, alltypesidrecord?.decimalType, alltypesidrecord?.stringType]
+        select persist:filterRecord({
             ...'object,
             "allTypesIdRecord": alltypesidrecord
         }, fields);
 }
 
-isolated function queryOneCompositeAssociationRecords(anydata key) returns record {}|persist:NotFoundError {
+isolated function queryOneCompositeassociationrecords(anydata key) returns record {}|persist:NotFoundError {
     table<CompositeAssociationRecord> key(id) compositeassociationrecordsClonedTable;
-    table<AllTypesIdRecord> key(booleanType, intType, floatType, decimalType, stringType) alltypesidrecordsClonedTable;
     lock {
         compositeassociationrecordsClonedTable = compositeassociationrecordsTable.clone();
     }
+    table<AllTypesIdRecord> key(booleanType, intType, floatType, decimalType, stringType) alltypesidrecordsClonedTable;
     lock {
         alltypesidrecordsClonedTable = alltypesidrecordsTable.clone();
     }
-
     from record {} 'object in compositeassociationrecordsClonedTable
     where persist:getKey('object, ["id"]) == key
-    outer join var alltypesidrecord in alltypesidrecordsClonedTable
-            on ['object.alltypesidrecordBooleanType, 'object.alltypesidrecordIntType, 'object.alltypesidrecordFloatType, 'object.alltypesidrecordDecimalType, 'object.alltypesidrecordStringType]
-            equals [alltypesidrecord?.booleanType, alltypesidrecord?.intType, alltypesidrecord?.floatType, alltypesidrecord?.decimalType, alltypesidrecord?.stringType]
+    outer join var alltypesidrecord in alltypesidrecordsClonedTable on ['object.alltypesidrecordBooleanType, 'object.alltypesidrecordIntType, 'object.alltypesidrecordFloatType, 'object.alltypesidrecordDecimalType, 'object.alltypesidrecordStringType] equals [alltypesidrecord?.booleanType, alltypesidrecord?.intType, alltypesidrecord?.floatType, alltypesidrecord?.decimalType, alltypesidrecord?.stringType]
     do {
         return {
             ...'object,
             "allTypesIdRecord": alltypesidrecord
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("CompositeAssociationRecord", key);
 }
 
-isolated function queryAllTypesIdRecords(string[] fields) returns stream<record {}, persist:Error?> {
+isolated function queryAlltypesidrecords(string[] fields) returns stream<record {}, persist:Error?> {
     table<AllTypesIdRecord> key(booleanType, intType, floatType, decimalType, stringType) alltypesidrecordsClonedTable;
     lock {
         alltypesidrecordsClonedTable = alltypesidrecordsTable.clone();
     }
-
     return from record {} 'object in alltypesidrecordsClonedTable
-        select persist:filterRecord(
-                {
+        select persist:filterRecord({
             ...'object
         }, fields);
 }
 
-isolated function queryOneAllTypesIdRecords(anydata key) returns record {}|persist:NotFoundError {
+isolated function queryOneAlltypesidrecords(anydata key) returns record {}|persist:NotFoundError {
     table<AllTypesIdRecord> key(booleanType, intType, floatType, decimalType, stringType) alltypesidrecordsClonedTable;
-    table<CompositeAssociationRecord> key(id) compositeassociationrecordsClonedTable;
     lock {
         alltypesidrecordsClonedTable = alltypesidrecordsTable.clone();
     }
-    lock {
-        compositeassociationrecordsClonedTable = compositeassociationrecordsTable.clone();
-    }
-
     from record {} 'object in alltypesidrecordsClonedTable
     where persist:getKey('object, ["booleanType", "intType", "floatType", "decimalType", "stringType"]) == key
-    outer join var compositeassociationrecord in compositeassociationrecordsClonedTable
-            on ['object.booleanType, 'object.intType, 'object.floatType, 'object.decimalType, 'object.stringType]
-            equals [compositeassociationrecord?.alltypesidrecordBooleanType, compositeassociationrecord?.alltypesidrecordIntType, compositeassociationrecord?.alltypesidrecordFloatType, compositeassociationrecord?.alltypesidrecordDecimalType, compositeassociationrecord?.alltypesidrecordStringType]
     do {
         return {
-            ...'object,
-            "compositeAssociationRecord": compositeassociationrecord
+            ...'object
         };
     };
-    return <persist:NotFoundError>error("Invalid key: " + key.toString());
+    return persist:getNotFoundError("AllTypesIdRecord", key);
 }
 
