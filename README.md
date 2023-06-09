@@ -4,7 +4,7 @@ Ballerina Persist - In-Memory Library
   [![Build](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/actions/workflows/build-timestamped-master.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/actions/workflows/build-timestamped-master.yml)
   [![codecov](https://codecov.io/gh/ballerina-platform/module-ballerinax-persist.inmemory/branch/main/graph/badge.svg)](https://codecov.io/gh/ballerina-platform/module-ballerinax-persist.inmemory)
   [![Trivy](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/actions/workflows/trivy-scan.yml)
-  [![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/actions/workflows/build-with-bal-test-native.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/actions/workflows/build-with-bal-test-native.yml)
+  [![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/actions/workflows/build-with-bal-test-graalvm.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/actions/workflows/build-with-bal-test-graalvm.yml)
   [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-persist.inmemory.svg)](https://github.com/ballerina-platform/module-ballerinax-persist.inmemory/commits/main)
   [![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-standard-library/module/persist.inmemory.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-standard-library/labels/module%2Fpersist.inmemory)
 
