@@ -50,6 +50,7 @@ import static io.ballerina.stdlib.persist.Utils.getMetadata;
 import static io.ballerina.stdlib.persist.Utils.getPersistClient;
 import static io.ballerina.stdlib.persist.Utils.getRecordTypeWithKeyFields;
 import static io.ballerina.stdlib.persist.Utils.getTransactionContextProperties;
+import static io.ballerina.stdlib.persist.inmemory.ModuleUtils.getModule;
 
 /**
   * This class provides the in-memory query processing implementations for persistence.
@@ -86,7 +87,7 @@ import static io.ballerina.stdlib.persist.Utils.getTransactionContextProperties;
                     public void notifySuccess(Object o) {
                         BStream sqlStream = (BStream) o;
                         BObject persistStream = ValueCreator.createObjectValue(
-                                ModuleUtils.getModule(), Constants.PERSIST_IN_MEMORY_STREAM, sqlStream, targetType,
+                                getModule(), Constants.PERSIST_IN_MEMORY_STREAM, sqlStream, targetType,
                                 fields, includes, typeDescriptions, persistClient, null
                         );
 
