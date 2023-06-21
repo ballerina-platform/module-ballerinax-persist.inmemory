@@ -35,8 +35,8 @@ import io.ballerina.runtime.api.values.BObject;
 import io.ballerina.runtime.api.values.BStream;
 import io.ballerina.runtime.api.values.BString;
 import io.ballerina.runtime.api.values.BTypedesc;
+import io.ballerina.stdlib.persist.ModuleUtils;
 import io.ballerina.stdlib.persist.inmemory.Constants;
-import io.ballerina.stdlib.persist.inmemory.ModuleUtils;
 
 import java.util.Map;
 
