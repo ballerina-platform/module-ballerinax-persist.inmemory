@@ -17,3 +17,9 @@ groupId = "io.ballerina.persist"
 artifactId = "persist-inmemory-native"
 version = "@toml.version@"
 path = "../native/build/libs/persist.inmemory-native-@project.version@.jar"
+
+[[platform.java11.dependency]]
+groupId = "io.ballerina.stdlib"
+artifactId = "persist-native"
+version = "@persist.version@"
+path = "./lib/persist-native-@persist.native.version@.jar"
