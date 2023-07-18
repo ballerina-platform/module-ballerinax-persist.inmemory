@@ -95,9 +95,8 @@ import static io.ballerina.stdlib.persist.Utils.getTransactionContextProperties;
 
                     @Override
                     public void notifyFailure(BError bError) {
-                        BError persistError = wrapError(bError);
                         balFuture.complete(Utils.createPersistInMemoryStreamValue(null, targetType, fields, includes,
-                                typeDescriptions, persistClient, persistError));
+                                typeDescriptions, persistClient, wrapError(bError)));
                     }
                 }, trxContextProperties, streamTypeWithIdFields, fields, true
         );
@@ -144,8 +143,7 @@ import static io.ballerina.stdlib.persist.Utils.getTransactionContextProperties;
 
                     @Override
                     public void notifyFailure(BError bError) {
-                        BError persistError = wrapError(bError);
-                        balFuture.complete(persistError);
+                        balFuture.complete(wrapError(bError));
                     }
                 },  trxContextProperties, unionType,
                 targetType, true, key, true, fields, true, includes, true,
