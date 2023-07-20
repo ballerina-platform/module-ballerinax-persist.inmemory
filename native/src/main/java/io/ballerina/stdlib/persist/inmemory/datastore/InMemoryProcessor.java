@@ -23,12 +23,10 @@ import io.ballerina.runtime.api.Future;
 import io.ballerina.runtime.api.PredefinedTypes;
 import io.ballerina.runtime.api.async.Callback;
 import io.ballerina.runtime.api.creators.TypeCreator;
-import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.types.ErrorType;
 import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.StreamType;
 import io.ballerina.runtime.api.types.Type;
-import io.ballerina.runtime.api.utils.TypeUtils;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BError;
 import io.ballerina.runtime.api.values.BObject;
@@ -36,7 +34,7 @@ import io.ballerina.runtime.api.values.BStream;
 import io.ballerina.runtime.api.values.BString;
 import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.persist.ModuleUtils;
-import io.ballerina.stdlib.persist.inmemory.Constants;
+import io.ballerina.stdlib.persist.inmemory.Utils;
 
 import java.util.Map;
 
@@ -44,13 +42,13 @@ import static io.ballerina.stdlib.persist.Constants.ERROR;
 import static io.ballerina.stdlib.persist.Constants.KEY_FIELDS;
 import static io.ballerina.stdlib.persist.Constants.RUN_READ_BY_KEY_QUERY_METHOD;
 import static io.ballerina.stdlib.persist.Constants.RUN_READ_QUERY_METHOD;
+import static io.ballerina.stdlib.persist.ErrorGenerator.wrapError;
 import static io.ballerina.stdlib.persist.Utils.getEntity;
 import static io.ballerina.stdlib.persist.Utils.getKey;
 import static io.ballerina.stdlib.persist.Utils.getMetadata;
 import static io.ballerina.stdlib.persist.Utils.getPersistClient;
 import static io.ballerina.stdlib.persist.Utils.getRecordTypeWithKeyFields;
 import static io.ballerina.stdlib.persist.Utils.getTransactionContextProperties;
-import static io.ballerina.stdlib.persist.inmemory.ModuleUtils.getModule;
 
 /**
   * This class provides the in-memory query processing implementations for persistence.
@@ -63,6 +61,8 @@ import static io.ballerina.stdlib.persist.inmemory.ModuleUtils.getModule;
      }
  
      public static BStream query(Environment env, BObject client, BTypedesc targetType) {
+         // This method will return `stream<targetType, persist:Error?>`
+
         BString entity = getEntity(env);
         BObject persistClient = getPersistClient(client, entity);
         BArray keyFields = (BArray) persistClient.get(KEY_FIELDS);
@@ -78,30 +78,25 @@ import static io.ballerina.stdlib.persist.inmemory.ModuleUtils.getModule;
         BArray typeDescriptions = metadata[2];
 
         Map<String, Object> trxContextProperties = getTransactionContextProperties();
+        String strandName = env.getStrandName().isPresent() ? env.getStrandName().get() : null;
 
         Future balFuture = env.markAsync();
         env.getRuntime().invokeMethodAsyncSequentially(
-                persistClient, RUN_READ_QUERY_METHOD,
-                null, null, new Callback() {
+                // Call `InMemoryClient.runReadQuery(string[] fields = [])`
+                // which returns `stream<record {}, persist:Error?>`
+
+                persistClient, RUN_READ_QUERY_METHOD,  strandName, env.getStrandMetadata(), new Callback() {
                     @Override
                     public void notifySuccess(Object o) {
-                        BStream sqlStream = (BStream) o;
-                        BObject persistStream = ValueCreator.createObjectValue(
-                                getModule(), Constants.PERSIST_IN_MEMORY_STREAM, sqlStream, targetType,
-                                fields, includes, typeDescriptions, persistClient, null
-                        );
-
-                        RecordType streamConstraint =
-                                (RecordType) TypeUtils.getReferredType(targetType.getDescribingType());
-                        balFuture.complete(
-                                ValueCreator.createStreamValue(TypeCreator.createStreamType(streamConstraint,
-                                        PredefinedTypes.TYPE_NULL), persistStream)
-                        );
+                        BStream stream = (BStream) o;
+                        balFuture.complete(Utils.createPersistInMemoryStreamValue(stream, targetType, fields,
+                                includes, typeDescriptions, persistClient, null));
                     }
 
                     @Override
                     public void notifyFailure(BError bError) {
-                        balFuture.complete(bError);
+                        balFuture.complete(Utils.createPersistInMemoryStreamValue(null, targetType, fields, includes,
+                                typeDescriptions, persistClient, wrapError(bError)));
                     }
                 }, trxContextProperties, streamTypeWithIdFields, fields, true
         );
@@ -110,6 +105,8 @@ import static io.ballerina.stdlib.persist.inmemory.ModuleUtils.getModule;
     }
 
     public static Object queryOne(Environment env, BObject client, BArray path, BTypedesc targetType) {
+        // This method will return `targetType|persist:Error`
+
         BString entity = getEntity(env);
         BObject persistClient = getPersistClient(client, entity);
         BArray keyFields = (BArray) persistClient.get(KEY_FIELDS);
@@ -125,12 +122,20 @@ import static io.ballerina.stdlib.persist.inmemory.ModuleUtils.getModule;
         BArray typeDescriptions = metadata[2];
 
         Object key = getKey(env, path);
+
         Map<String, Object> trxContextProperties = getTransactionContextProperties();
+        String strandName = env.getStrandName().isPresent() ? env.getStrandName().get() : null;
 
         Future balFuture = env.markAsync();
         env.getRuntime().invokeMethodAsyncSequentially(
-                getPersistClient(client, entity), RUN_READ_BY_KEY_QUERY_METHOD,
-                null, null, new Callback() {
+                // Call `InMemoryClient.runReadByKeyQuery(
+                //      typedesc<record {}> rowType, anydata key, string[] fields = [], string[] include = [],
+                //      typedesc<record {}>[] typeDescriptions = []
+                // )`
+                // which returns `record {}|persist:Error`
+
+                getPersistClient(client, entity), RUN_READ_BY_KEY_QUERY_METHOD, strandName, env.getStrandMetadata(),
+                new Callback() {
                     @Override
                     public void notifySuccess(Object o) {
                         balFuture.complete(o);
@@ -138,7 +143,7 @@ import static io.ballerina.stdlib.persist.inmemory.ModuleUtils.getModule;
 
                     @Override
                     public void notifyFailure(BError bError) {
-                        balFuture.complete(bError);
+                        balFuture.complete(wrapError(bError));
                     }
                 },  trxContextProperties, unionType,
                 targetType, true, key, true, fields, true, includes, true,
