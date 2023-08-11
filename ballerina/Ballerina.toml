@@ -1,13 +1,13 @@
 [package]
 org = "ballerinax"
 name = "persist.inmemory"
-version = "1.1.1"
+version = "1.2.0"
 authors = ["Ballerina"]
 keywords = ["persist", "inmemory"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-persist.inmemory"
 icon = "icon.png"
 license = ["Apache-2.0"]
-distribution = "2201.7.0"
+distribution = "2201.8.0"
 
 [platform.java17]
 graalvmCompatible = true
@@ -15,11 +15,11 @@ graalvmCompatible = true
 [[platform.java17.dependency]]
 groupId = "io.ballerina.persist"
 artifactId = "persist-inmemory-native"
-version = "1.1.1"
-path = "../native/build/libs/persist.inmemory-native-1.1.1-SNAPSHOT.jar"
+version = "1.2.0"
+path = "../native/build/libs/persist.inmemory-native-1.2.0-SNAPSHOT.jar"
 
 [[platform.java17.dependency]]
 groupId = "io.ballerina.stdlib"
 artifactId = "persist-native"
-version = "1.1.1"
-path = "./lib/persist-native-1.1.1-20230718-104500-b6791bc.jar"
+version = "1.2.0"
+path = "./lib/persist-native-1.2.0-20230810-161400-f232e8d.jar"
