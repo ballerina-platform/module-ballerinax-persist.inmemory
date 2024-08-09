@@ -90,7 +90,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "persist.inmemory"
-version = "1.3.0"
+version = "1.4.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "persist"},
