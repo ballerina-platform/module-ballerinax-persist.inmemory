@@ -59,10 +59,10 @@ import static io.ballerina.stdlib.persist.Utils.getPersistClient;
 
         return env.yieldAndRun(() -> {
             try {
-                Object result = env.getRuntime().call(
+                Object result = env.getRuntime().callMethod(
                         // Call `InMemoryClient.runReadQuery(string[] fields = [])`
                         // which returns `stream<record {}, persist:Error?>`
-                        persistClient, RUN_READ_QUERY_METHOD, fields
+                        persistClient, RUN_READ_QUERY_METHOD, null, fields
                 );
                 BStream stream = (BStream) result;
                 return Utils.createPersistInMemoryStreamValue(stream, targetType, fields,
@@ -90,8 +90,8 @@ import static io.ballerina.stdlib.persist.Utils.getPersistClient;
 
         return env.yieldAndRun(() -> {
             try {
-                return  env.getRuntime().call(getPersistClient(client, entity), RUN_READ_BY_KEY_QUERY_METHOD,
-                        targetType, key, fields, includes, typeDescriptions);
+                return  env.getRuntime().callMethod(getPersistClient(client, entity), RUN_READ_BY_KEY_QUERY_METHOD,
+                        null, targetType, key, fields, includes, typeDescriptions);
 
             } catch (BError bError) {
                 return wrapError(bError);
