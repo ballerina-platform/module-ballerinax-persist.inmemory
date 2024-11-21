@@ -7,7 +7,7 @@ keywords = ["persist", "inmemory"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-persist.inmemory"
 icon = "icon.png"
 license = ["Apache-2.0"]
-distribution = "2201.10.0-20241011-161100-51978649"
+distribution = "2201.11.0"
 
 [platform.java21]
 graalvmCompatible = true
