@@ -16,10 +16,10 @@ graalvmCompatible = true
 groupId = "io.ballerina.stdlib"
 artifactId = "persist.inmemory-native"
 version = "1.6.0"
-path = "../native/build/libs/persist.inmemory-native-1.6.0-SNAPSHOT.jar"
+path = "../native/build/libs/persist.inmemory-native-1.6.0.jar"
 
 [[platform.java21.dependency]]
 groupId = "io.ballerina.stdlib"
 artifactId = "persist-native"
 version = "1.6.0"
-path = "./lib/persist-native-1.6.0-20250311-133500-893e077.jar"
+path = "./lib/persist-native-1.6.0.jar"
