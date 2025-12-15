@@ -1,9 +1,9 @@
 [package]
 org = "ballerinax"
 name = "persist.inmemory"
-version = "1.6.0"
+version = "1.6.1"
 authors = ["Ballerina"]
-keywords = ["persist", "inmemory"]
+keywords = ["persist", "inmemory", "Vendor/N/A", "Area/Database", "Type/Util"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-persist.inmemory"
 icon = "icon.png"
 license = ["Apache-2.0"]
@@ -15,8 +15,8 @@ graalvmCompatible = true
 [[platform.java21.dependency]]
 groupId = "io.ballerina.stdlib"
 artifactId = "persist.inmemory-native"
-version = "1.6.0"
-path = "../native/build/libs/persist.inmemory-native-1.6.0.jar"
+version = "1.6.1"
+path = "../native/build/libs/persist.inmemory-native-1.6.1-SNAPSHOT.jar"
 
 [[platform.java21.dependency]]
 groupId = "io.ballerina.stdlib"
