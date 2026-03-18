@@ -1,8 +1,13 @@
-# Overview
+## Overview
 
-This package provides in-memory table support for the `bal persist` feature, which provides functionality to store and query data from in-memory tables conveniently through a data model.
+The Persist In-Memory connector provides in-memory table support for the `bal persist` feature, enabling data storage and querying from in-memory tables conveniently through a data model. This data store is useful for testing purposes.
 
-The In-Memory data store is a simple data store that stores data in memory. This data store is useful for testing purposes.
+### Key Features
+
+- Store and query data from in-memory tables through a data model
+- Support for all Ballerina data types
+- Default data store for `bal persist` with zero configuration
+- Integration with `bal build` for seamless code generation
 
 ## How to use with `bal persist`
 
@@ -37,9 +42,17 @@ When using one-time generation, you need to specify the data store.
     ```
     $ bal persist generate --datastore inmemory --module <module_name>
    ```
-   
+
 ## Supported Ballerina Types
 In-memory uses Ballerina tables as the data store. Therefore, all types supported by Ballerina are supported with `bal persist` when in-memory is used as the data source.
 
 ## Configuration
 The In-Memory data store does not require any configuration.
+
+## Report issues
+
+To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina standard library parent repository](https://github.com/ballerina-platform/ballerina-standard-library).
+
+## Useful links
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.
