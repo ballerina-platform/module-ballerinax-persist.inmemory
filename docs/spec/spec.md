@@ -239,7 +239,7 @@ The in-memory client does not take part in Ballerina transactions. A resource me
 
 ## 6. Security considerations
 
-1. The records are held unencrypted in the memory of the program, and are not written to any storage.
+1. The records are held unencrypted in the memory of the program. The library does not write them to any storage.
 2. The in-memory datastore has no authentication or access control. Any code of the program that can use the generated module can read and change all its records.
 3. The tables have no size limit. The number and size of the records are bounded only by the memory of the program.
 
